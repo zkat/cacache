@@ -39,7 +39,7 @@
     "through2": "^2.0.1"
   },
   "devDependencies": {
-    "nyc": "^9.0.1",
+    "nyc": "^10.0.0",
     "require-inject": "^1.4.0",
     "standard": "^8.5.0",
     "tacks": "^1.2.2",
