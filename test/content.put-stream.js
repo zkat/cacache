@@ -40,57 +40,57 @@ test('basic put', function (t) {
   })
 })
 
-// test('checks input digest doesn\'t match data', function (t) {
-//   var CONTENT = 'foobarbaz'
-//   var DIGEST = crypto.createHash('sha1').update(CONTENT).digest('hex')
-//   t.plan(5)
-//   var foundDigest1
-//   var foundDigest2
-//   pipe(fromString('bazbarfoo'), putStream(CACHE, {
-//     digest: DIGEST
-//   }).on('digest', function (d) {
-//     foundDigest1 = d
-//   }), function (err) {
-//     t.ok(!foundDigest1, 'no digest emitted')
-//     t.ok(!!err, 'got an error')
-//     t.equal(err.code, 'EBADCHECKSUM', 'returns a useful error code')
-//   })
-//   pipe(fromString(CONTENT), putStream(CACHE, {
-//     digest: DIGEST
-//   }).on('digest', function (d) {
-//     foundDigest2 = d
-//   }), function (err) {
-//     t.ok(!err, 'completed without error')
-//     t.equal(foundDigest2, DIGEST, 'returns a matching digest')
-//   })
-// })
+test('checks input digest doesn\'t match data', function (t) {
+  var CONTENT = 'foobarbaz'
+  var DIGEST = crypto.createHash('sha1').update(CONTENT).digest('hex')
+  t.plan(5)
+  var foundDigest1
+  var foundDigest2
+  pipe(fromString('bazbarfoo'), putStream(CACHE, {
+    digest: DIGEST
+  }).on('digest', function (d) {
+    foundDigest1 = d
+  }), function (err) {
+    t.ok(!foundDigest1, 'no digest emitted')
+    t.ok(!!err, 'got an error')
+    t.equal(err.code, 'EBADCHECKSUM', 'returns a useful error code')
+  })
+  pipe(fromString(CONTENT), putStream(CACHE, {
+    digest: DIGEST
+  }).on('digest', function (d) {
+    foundDigest2 = d
+  }), function (err) {
+    t.ok(!err, 'completed without error')
+    t.equal(foundDigest2, DIGEST, 'returns a matching digest')
+  })
+})
 
-// test('errors if stream ends with no data', function (t) {
-//   var foundDigest
-//   pipe(fromString(''), putStream(CACHE).on('digest', function (d) {
-//     foundDigest = d
-//   }), function (err) {
-//     t.ok(err, 'got an error')
-//     t.ok(!foundDigest, 'no digest returned')
-//     t.equal(err.code, 'ENODATA', 'returns useful error code')
-//     t.end()
-//   })
-// })
-//
-// test('errors if input stream errors', function (t) {
-//   var stream = fromString('foo').on('data', function (d) {
-//     stream.emit('error', new Error('bleh'))
-//   })
-//   var foundDigest
-//   pipe(stream, putStream(CACHE).on('digest', function (d) {
-//     foundDigest = d
-//   }), function (err) {
-//     t.ok(err, 'got an error')
-//     t.ok(!foundDigest, 'no digest returned')
-//     t.match(err.message, 'bleh', 'returns the error from input stream')
-//     t.end()
-//   })
-// })
+test('errors if stream ends with no data', function (t) {
+  var foundDigest
+  pipe(fromString(''), putStream(CACHE).on('digest', function (d) {
+    foundDigest = d
+  }), function (err) {
+    t.ok(err, 'got an error')
+    t.ok(!foundDigest, 'no digest returned')
+    t.equal(err.code, 'ENODATA', 'returns useful error code')
+    t.end()
+  })
+})
+
+test('errors if input stream errors', function (t) {
+  var stream = fromString('foo').on('data', function (d) {
+    stream.emit('error', new Error('bleh'))
+  })
+  var foundDigest
+  pipe(stream, putStream(CACHE).on('digest', function (d) {
+    foundDigest = d
+  }), function (err) {
+    t.ok(err, 'got an error')
+    t.ok(!foundDigest, 'no digest returned')
+    t.match(err.message, 'bleh', 'returns the error from input stream')
+    t.end()
+  })
+})
 
 test('does not overwrite content if already on disk', function (t) {
   var CONTENT = 'foobarbaz'
