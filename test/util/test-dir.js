@@ -19,6 +19,12 @@ function testDir (filename) {
       cb()
     })
   })
+  tap.afterEach(function (cb) {
+    reset(dir, function (err) {
+      if (err) { throw err }
+      cb()
+    })
+  })
   if (!process.env.KEEPCACHE) {
     tap.tearDown(function (cb) {
       process.chdir(__dirname)
