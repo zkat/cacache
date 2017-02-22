@@ -5,6 +5,8 @@ var path = require('path')
 var rimraf = require('rimraf')
 var tap = require('tap')
 
+require('graceful-fs')
+
 var cacheDir = path.resolve(__dirname, '../cache')
 
 module.exports = testDir
@@ -18,15 +20,9 @@ function testDir (filename) {
     })
   })
   if (!process.env.KEEPCACHE) {
-    tap.tearDown(function () {
+    tap.tearDown(function (cb) {
       process.chdir(__dirname)
-      try {
-        rimraf.sync(dir)
-      } catch (e) {
-        if (process.platform !== 'win32') {
-          throw e
-        }
-      }
+      rimraf(dir, cb || function () {})
     })
   }
   return dir
