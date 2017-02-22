@@ -38,7 +38,7 @@ module.exports.reset = reset
 function reset (testDir, cb) {
   process.chdir(__dirname)
   rimraf(testDir, function (err) {
-    if (err) { return cb(err) }
+    if (err && process.platform !== 'win32') { return cb(err) }
     mkdirp(testDir, function (err) {
       if (err) { return cb(err) }
       process.chdir(testDir)
