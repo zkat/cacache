@@ -2,8 +2,8 @@
   "name": "cacache",
   "version": "6.0.1",
   "cache-version": {
-    "content": "1",
-    "index": "1"
+    "content": "2",
+    "index": "2"
   },
   "description": "General content-addressable cache system that maintains a filesystem registry of file data.",
   "main": "index.js",
