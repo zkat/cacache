@@ -58,7 +58,6 @@
     "once": "^1.4.0",
     "promise-inflight": "^1.0.1",
     "rimraf": "^2.6.1",
-    "slide": "^1.1.6",
     "unique-filename": "^1.1.0"
   },
   "devDependencies": {
