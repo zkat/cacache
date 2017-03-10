@@ -46,6 +46,7 @@
   ],
   "license": "CC0-1.0",
   "dependencies": {
+    "@npmcorp/copy": "^1.0.0",
     "@npmcorp/move": "^1.0.0",
     "bluebird": "^3.4.7",
     "checksum-stream": "^1.0.2",
