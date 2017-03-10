@@ -150,3 +150,173 @@ test('errors if input stream errors', function (t) {
     t.deepEqual(files, [], 'no files created')
   })
 })
+
+test('supports a single cache mirror on bulk puts', t => {
+  const MIRROR = CACHE + 'mirror'
+  return put(CACHE, KEY, CONTENT, {
+    mirror: MIRROR,
+    metadata: METADATA
+  }).then(digest => {
+    t.equal(digest, DIGEST, 'returned content digest')
+    return BB.join(
+      fs.readFileAsync(contentPath(CACHE, digest, ALGO)),
+      fs.readFileAsync(contentPath(MIRROR, digest, ALGO)),
+      (mainData, mirrorData) => {
+        t.deepEqual(mainData, CONTENT, 'content is in main cache')
+        t.deepEqual(mirrorData, CONTENT, 'content is also in mirrored cache')
+      }
+    )
+  }).then(() => {
+    return BB.join(
+      index.find(CACHE, KEY),
+      index.find(MIRROR, KEY),
+      (mainEntry, mirrorEntry) => {
+        t.ok(mainEntry, 'main entry inserted')
+        t.equal(mainEntry.key, KEY, 'main entry has the right key')
+        t.equal(mainEntry.digest, DIGEST, 'main entry has the right digest')
+        t.deepEqual(
+          mainEntry.metadata, METADATA, 'main metadata also inserted')
+        t.ok(mirrorEntry, 'mirror entry inserted')
+        t.equal(mirrorEntry.key, KEY, 'mirror entry has the right key')
+        t.equal(
+          mirrorEntry.digest, DIGEST, 'mirror entry has the right digest')
+        t.deepEqual(
+          mirrorEntry.metadata, METADATA, 'mirror metadata also inserted')
+      }
+    )
+  })
+})
+
+test('supports a single cache mirror in stream puts', t => {
+  let foundDigest
+  const MIRROR = CACHE + 'mirror'
+  const src = fromString(CONTENT)
+  const stream = put.stream(CACHE, KEY, {
+    metadata: METADATA,
+    mirror: MIRROR
+  }).on('digest', function (d) {
+    foundDigest = d
+  })
+  return pipe(src, stream).then(() => {
+    t.equal(foundDigest, DIGEST, 'returned digest matches expected')
+    return BB.join(
+      fs.readFileAsync(contentPath(CACHE, DIGEST, ALGO)),
+      fs.readFileAsync(contentPath(MIRROR, DIGEST, ALGO)),
+      (mainData, mirrorData) => {
+        t.deepEqual(mainData, CONTENT, 'content is in main cache')
+        t.deepEqual(mirrorData, CONTENT, 'content is also in mirrored cache')
+      }
+    )
+  }).then(() => {
+    return BB.join(
+      index.find(CACHE, KEY),
+      index.find(MIRROR, KEY),
+      (mainEntry, mirrorEntry) => {
+        t.ok(mainEntry, 'main entry inserted')
+        t.equal(mainEntry.key, KEY, 'main entry has the right key')
+        t.equal(mainEntry.digest, DIGEST, 'main entry has the right digest')
+        t.deepEqual(
+          mainEntry.metadata, METADATA, 'main metadata also inserted')
+        t.ok(mirrorEntry, 'mirror entry inserted')
+        t.equal(mirrorEntry.key, KEY, 'mirror entry has the right key')
+        t.equal(
+          mirrorEntry.digest, DIGEST, 'mirror entry has the right digest')
+        t.deepEqual(
+          mirrorEntry.metadata, METADATA, 'mirror metadata also inserted')
+      }
+    )
+  })
+})
+
+test('supports an array of cache mirrors on bulk puts', t => {
+  const MIRROR1 = CACHE + 'mirror1'
+  const MIRROR2 = CACHE + 'mirror2'
+  const MIRROR3 = CACHE + 'mirror3'
+  const MIRROR4 = CACHE + 'mirror4'
+  return put(CACHE, KEY, CONTENT, {
+    mirror: [MIRROR1, MIRROR2, MIRROR3, MIRROR4],
+    metadata: METADATA
+  }).then(digest => {
+    t.equal(digest, DIGEST, 'returned content digest')
+    return BB.join(
+      fs.readFileAsync(contentPath(CACHE, digest, ALGO)),
+      fs.readFileAsync(contentPath(MIRROR1, digest, ALGO)),
+      fs.readFileAsync(contentPath(MIRROR2, digest, ALGO)),
+      fs.readFileAsync(contentPath(MIRROR3, digest, ALGO)),
+      fs.readFileAsync(contentPath(MIRROR4, digest, ALGO)),
+      (mainData, m1, m2, m3, m4) => {
+        const arr = [mainData, m1, m2, m3, m4]
+        arr.forEach((d, i) => {
+          t.deepEqual(
+            d, CONTENT, `content is in ${i ? 'mirror #' + i : 'main'} cache`)
+        })
+      }
+    )
+  }).then(() => {
+    return BB.join(
+      index.find(CACHE, KEY),
+      index.find(MIRROR1, KEY),
+      index.find(MIRROR2, KEY),
+      index.find(MIRROR3, KEY),
+      index.find(MIRROR4, KEY),
+      (mainEntry, m1, m2, m3, m4) => {
+        const arr = [mainEntry, m1, m2, m3, m4]
+        arr.forEach((e, i) => {
+          t.ok(e, 'entry inserted')
+          t.equal(e.key, KEY, 'entry has the right key')
+          t.equal(e.digest, DIGEST, 'entry has the right digest')
+          t.deepEqual(e.metadata, METADATA, 'metadata also inserted')
+        })
+      }
+    )
+  })
+})
+
+test('supports an array of cache mirrors in stream puts', t => {
+  let foundDigest
+  const MIRROR1 = CACHE + 'mirror1'
+  const MIRROR2 = CACHE + 'mirror2'
+  const MIRROR3 = CACHE + 'mirror3'
+  const MIRROR4 = CACHE + 'mirror4'
+  const src = fromString(CONTENT)
+  const stream = put.stream(CACHE, KEY, {
+    metadata: METADATA,
+    mirror: [MIRROR1, MIRROR2, MIRROR3, MIRROR4]
+  }).on('digest', function (d) {
+    foundDigest = d
+  })
+  return pipe(src, stream).then(() => {
+    t.equal(foundDigest, DIGEST, 'returned digest matches expected')
+    return BB.join(
+      fs.readFileAsync(contentPath(CACHE, DIGEST, ALGO)),
+      fs.readFileAsync(contentPath(MIRROR1, DIGEST, ALGO)),
+      fs.readFileAsync(contentPath(MIRROR2, DIGEST, ALGO)),
+      fs.readFileAsync(contentPath(MIRROR3, DIGEST, ALGO)),
+      fs.readFileAsync(contentPath(MIRROR4, DIGEST, ALGO)),
+      (mainData, m1, m2, m3, m4) => {
+        const arr = [mainData, m1, m2, m3, m4]
+        arr.forEach((d, i) => {
+          t.deepEqual(
+            d, CONTENT, `content is in ${i ? 'mirror #' + i : 'main'} cache`)
+        })
+      }
+    )
+  }).then(() => {
+    return BB.join(
+      index.find(CACHE, KEY),
+      index.find(MIRROR1, KEY),
+      index.find(MIRROR2, KEY),
+      index.find(MIRROR3, KEY),
+      index.find(MIRROR4, KEY),
+      (mainEntry, m1, m2, m3, m4) => {
+        const arr = [mainEntry, m1, m2, m3, m4]
+        arr.forEach((e, i) => {
+          t.ok(e, 'entry inserted')
+          t.equal(e.key, KEY, 'entry has the right key')
+          t.equal(e.digest, DIGEST, 'entry has the right digest')
+          t.deepEqual(e.metadata, METADATA, 'metadata also inserted')
+        })
+      }
+    )
+  })
+})
