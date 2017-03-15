@@ -376,6 +376,14 @@ Reading from existing memoized data can be forced by explicitly passing
 `memoize: false` to the reader functions, but their default will be to read from
 memory.
 
+##### `mirror`
+
+Default: null
+
+Can be either a path or array of path. `put` will mirror any writes to a cache
+at this location (or locations, if it's an array). Mirroring will only occur
+after writes to the main cache have been completed, and errors will be ignored.
+
 #### <a name="rm-all"></a> `> cacache.rm.all(cache) -> Promise`
 
 Clears the entire cache. Mainly by blowing away the cache directory itself.

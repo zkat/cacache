@@ -2,6 +2,7 @@
 
 const index = require('./lib/entry-index')
 const memo = require('./lib/memoization')
+const mirror = require('./lib/content/mirror')
 const write = require('./lib/content/write')
 const to = require('mississippi').to
 
@@ -13,7 +14,9 @@ function putData (cache, key, data, opts) {
       if (opts.memoize) {
         memo.put(cache, entry, data)
       }
-      return digest
+      return handleMirroring(
+        cache, opts.mirror, entry, digest, opts
+      ).then(() => digest)
     })
   })
 }
@@ -42,8 +45,10 @@ function putStream (cache, key, opts) {
         if (opts.memoize) {
           memo.put(cache, entry, Buffer.concat(memoData, memoTotal))
         }
-        stream.emit('digest', digest)
-        cb()
+        handleMirroring(cache, opts.mirror, entry, digest, opts).then(() => {
+          stream.emit('digest', digest)
+          cb()
+        })
       })
     })
   })
@@ -59,4 +64,22 @@ function putStream (cache, key, opts) {
     stream.emit('error', err)
   })
   return stream
+}
+
+function handleMirroring (cache, target, entry, digest, opts) {
+  if (typeof target === 'string') {
+    return mirror(cache, target, digest, opts).then(() => {
+      return index.insert(target, entry.key, digest, opts)
+    }).catch(err => {
+      opts.log && opts.log.warn(
+        'cache',
+        `mirroring failed\n  from: ${cache}\n  to: ${opts.mirror}\n\n${err}`)
+    })
+  } else if (Array.isArray(target)) {
+    return Promise.all(
+      target.map(
+        m => handleMirroring(cache, m, entry, digest, opts)))
+  } else {
+    return Promise.resolve()
+  }
 }
