@@ -331,7 +331,7 @@ false
 #### <a name="put-data"></a> `> cacache.put(cache, key, data, [opts]) -> Promise`
 
 Inserts data passed to it into the cache. The returned Promise resolves with a
-digest (generated according to [`opts.hashAlgorithm`](#hashalgorithm)) after the
+digest (generated according to [`opts.algorithms`](#optsalgorithms)) after the
 cache entry has been successfully written.
 
 ##### Example
@@ -385,19 +385,20 @@ If present, the pre-calculated digest for the inserted content. If this option
 if provided and does not match the post-insertion digest, insertion will fail
 with an `EINTEGRITY` error.
 
-`hashAlgorithm` has no effect if this option is present.
+`algorithms` has no effect if this option is present.
 
-##### `opts.hashAlgorithm`
+##### `opts.algorithms`
 
-Default: 'sha512'
+Default: ['sha512']
 
-Hashing algorithm to use when calculating the [subresource integrity
+Hashing algorithms to use when calculating the [subresource integrity
 digest](#integrity)
 for inserted data. Can use any algorithm listed in `crypto.getHashes()` or
 `'omakase'`/`'お任せします'` to pick a random hash algorithm on each insertion. You
 may also use any anagram of `'modnar'` to use this feature.
 
-Has no effect if `opts.integrity` is present.
+Currently only supports one algorithm at a time (i.e., an array length of 
+exactly `1`). Has no effect if `opts.integrity` is present.
 
 ##### `opts.uid`/`opts.gid`
 
