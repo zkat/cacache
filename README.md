@@ -24,6 +24,7 @@ can just as easily be used on its own
     * [`get`](#get-data)
     * [`get.stream`](#get-stream)
     * [`get.info`](#get-info)
+    * [`get.hasContent`](#get-hasContent)
   * Writing
     * [`put`](#put-data)
     * [`put.stream`](#put-stream)
@@ -292,6 +293,39 @@ cacache.get.info(cachePath, 'my-thing').then(console.log)
     description: 'this was once a package but now it is my-thing'
   }
 }
+```
+
+#### <a name="get-hasContent"></a> `> cacache.get.hasContent(cache, integrity) -> Promise`
+
+Looks up a [Subresource Integrity hash](#integrity) in the cache. If content 
+exists for this `integrity`, it will return the specific single integrity hash
+that was found. If no content exists for this integrity, it will return `false`.
+
+##### Fields
+
+* `source` - The [Subresource Integrity hash](#integrity) that was provided as an
+argument and subsequently found in the cache.
+* `algorithm` - The algorithm used in the hash.
+* `digest` - The digest portion of the hash.
+* `options`
+
+##### Example
+
+```javascript
+cacache.get.hasContent(cachePath, 'sha256-MUSTVERIFY+ALL/THINGS==').then(console.log)
+
+// Output
+{
+  source: 'sha256-MUSTVERIFY+ALL/THINGS==',
+  algorithm: 'sha256',
+  digest: 'MUSTVERIFY+ALL/THINGS==',
+  options: []
+}
+
+cacache.get.hasContent(cachePath, 'sha521-NOT+IN/CACHE==').then(console.log)
+
+// Output
+false
 ```
 
 #### <a name="put-data"></a> `> cacache.put(cache, key, data, [opts]) -> Promise`
