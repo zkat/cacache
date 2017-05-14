@@ -8,6 +8,8 @@ get corrupted or manipulated.
 It was originally written to be used as [npm](https://npm.im)'s local cache, but
 can just as easily be used on its own
 
+Read this in: [`español`](README.es.md)
+
 ## Install
 
 `$ npm install --save cacache`
