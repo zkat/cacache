@@ -4,6 +4,8 @@
 
 El propósito original era reemplazar el caché local de [npm](https://npm.im/npm), pero se puede usar por su propia cuenta.
 
+_Traducciones: [English](README.md)_
+
 ## Instalación
 
 `$ npm install --save cacache`

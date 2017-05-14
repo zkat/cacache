@@ -8,7 +8,7 @@ get corrupted or manipulated.
 It was originally written to be used as [npm](https://npm.im)'s local cache, but
 can just as easily be used on its own
 
-Read this in: [`español`](README.es.md)
+_Translations: [español](README.es.md)_
 
 ## Install
 
