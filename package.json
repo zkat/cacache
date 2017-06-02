@@ -78,7 +78,7 @@
     "cross-env": "^5.0.0",
     "nyc": "^10.3.2",
     "require-inject": "^1.4.0",
-    "safe-buffer": "^5.0.1",
+    "safe-buffer": "5.0.1",
     "standard": "^10.0.2",
     "standard-version": "^4.0.0",
     "tacks": "^1.2.2",
