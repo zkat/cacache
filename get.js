@@ -2,7 +2,7 @@
 
 const BB = require('bluebird')
 
-const fs = require('fs')
+const fs = BB.promisifyAll(require('fs'))
 const index = require('./lib/entry-index')
 const memo = require('./lib/memoization')
 const pipe = require('mississippi').pipe
@@ -169,9 +169,22 @@ function copy (byDigest, cache, key, dest, opts) {
       if (!entry && !byDigest) {
         throw new index.NotFoundError(cache, key)
       }
-      return read.copy(
-        cache, byDigest ? key : entry.integrity, dest, opts
-      ).then(() => byDigest ? key : {
+      return read.copy(cache, byDigest ? key : entry.integrity, dest, opts)
+      .then(info => {
+        const needsMode = opts.mode != null && opts.mode !== info.stat.mode
+        const needsTime = opts.mtime != null && opts.mtime !== info.stat.mtime
+        if (needsMode || needsTime) {
+          return fs.openAsync(dest, 'w')
+          .then(fd => BB.join(
+            needsMode && fs.fchmodAsync(fd, opts.mode),
+            needsTime && fs.futimesAsync(fd, Date.now(), new Date(opts.mtime))
+          ).then(
+            () => fs.closeAsync(fd),
+            err => fs.closeAsync(fd).then(() => { throw err })
+          ))
+        }
+      })
+      .then(() => byDigest ? key : {
         metadata: entry.metadata,
         size: entry.size,
         integrity: entry.integrity
