@@ -169,21 +169,23 @@ function copy (byDigest, cache, key, dest, opts) {
       if (!entry && !byDigest) {
         throw new index.NotFoundError(cache, key)
       }
-      return read.copy(cache, byDigest ? key : entry.integrity, dest, opts)
-      .then(info => {
-        const needsMode = opts.mode != null && opts.mode !== info.stat.mode
-        const needsTime = opts.mtime != null && opts.mtime !== info.stat.mtime
-        if (needsMode || needsTime) {
-          return fs.openAsync(dest, 'w')
-          .then(fd => BB.join(
-            needsMode && fs.fchmodAsync(fd, opts.mode),
-            needsTime && fs.futimesAsync(fd, Date.now(), new Date(opts.mtime))
-          ).then(
-            () => fs.closeAsync(fd),
-            err => fs.closeAsync(fd).then(() => { throw err })
-          ))
+      return BB.join(
+        read.copy(cache, byDigest ? key : entry.integrity, dest, opts),
+        opts.unsafe ? null : getData(byDigest, cache, key, opts),
+        info => {
+          const mtime = opts.mtime != null && +(new Date(opts.mtime))
+          const mode = opts.mode != null &&
+          (info.stat.isFile() ? 0o100000 : 0o40000) | opts.mode
+          const needsMode = mode && mode !== info.stat.mode
+          const needsTime = mtime && mtime !== info.stat.mtime
+          if (needsMode || needsTime) {
+            return BB.join(
+              needsMode && fs.chmodAsync(dest, mode),
+              needsTime && fs.utimesAsync(dest, Date.now(), new Date(mtime))
+            )
+          }
         }
-      })
+      )
       .then(() => byDigest ? key : {
         metadata: entry.metadata,
         size: entry.size,
