@@ -82,7 +82,7 @@
     "standard": "^10.0.2",
     "standard-version": "^4.2.0",
     "tacks": "^1.2.2",
-    "tap": "^10.7.0",
+    "tap": "^11.0.0",
     "weallbehave": "^1.2.0",
     "weallcontribute": "^1.0.8"
   },
