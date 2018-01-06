@@ -3,7 +3,7 @@
 const BB = require('bluebird')
 
 const CacheIndex = require('./util/cache-index')
-const finished = BB.promisify(require('mississippi').finished)
+const finished = BB.promisify(require('end-of-stream'))
 const path = require('path')
 const Tacks = require('tacks')
 const test = require('tap').test
