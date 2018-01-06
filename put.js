@@ -3,7 +3,7 @@
 const index = require('./lib/entry-index')
 const memo = require('./lib/memoization')
 const write = require('./lib/content/write')
-const to = require('mississippi').to
+const to = require('flush-write-stream')
 
 module.exports = putData
 function putData (cache, key, data, opts) {

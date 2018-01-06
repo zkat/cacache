@@ -5,10 +5,10 @@ const BB = require('bluebird')
 const fs = require('fs')
 const index = require('./lib/entry-index')
 const memo = require('./lib/memoization')
-const pipe = require('mississippi').pipe
-const pipeline = require('mississippi').pipeline
+const pipe = require('pump')
+const pipeline = require('pumpify')
 const read = require('./lib/content/read')
-const through = require('mississippi').through
+const through = require('through2')
 
 module.exports = function get (cache, key, opts) {
   return getData(false, cache, key, opts)

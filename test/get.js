@@ -3,7 +3,7 @@
 const Buffer = require('safe-buffer').Buffer
 const BB = require('bluebird')
 
-const finished = BB.promisify(require('mississippi').finished)
+const finished = BB.promisify(require('end-of-stream'))
 const fs = require('fs')
 const index = require('../lib/entry-index')
 const memo = require('../lib/memoization')

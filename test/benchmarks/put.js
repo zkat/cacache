@@ -2,7 +2,7 @@
 
 const BB = require('bluebird')
 
-const finished = BB.promisify(require('mississippi').finished)
+const finished = BB.promisify(require('end-of-stream'))
 
 let buf = []
 for (let i = 0; i < Math.pow(2, 8); i++) {

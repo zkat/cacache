@@ -1,6 +1,6 @@
 'use strict'
 
-var through = require('mississippi').through
+var through = require('through2')
 
 module.exports = fromString
 function fromString (str) {

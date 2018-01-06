@@ -2,7 +2,7 @@
 
 const fromString = require('./util/from-string')
 const path = require('path')
-const pipe = require('mississippi').pipe
+const pipe = require('pump')
 const requireInject = require('require-inject')
 const ssri = require('ssri')
 const test = require('tap').test
