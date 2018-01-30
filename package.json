@@ -63,7 +63,7 @@
     "glob": "^7.1.2",
     "graceful-fs": "^4.1.11",
     "lru-cache": "^4.1.1",
-    "mississippi": "^1.3.0",
+    "mississippi": "^2.0.0",
     "mkdirp": "^0.5.1",
     "move-concurrently": "^1.0.1",
     "promise-inflight": "^1.0.1",
