@@ -16,7 +16,8 @@ const PutOpts = figgyPudding({
   size: {},
   tmpPrefix: {},
   uid: {},
-  gid: {}
+  gid: {},
+  single: {}
 })
 
 module.exports = putData
