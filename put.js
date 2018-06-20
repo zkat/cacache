@@ -13,11 +13,14 @@ const PutOpts = figgyPudding({
   integrity: {},
   memoize: {},
   metadata: {},
+  pickAlgorithm: {},
   size: {},
   tmpPrefix: {},
   uid: {},
   gid: {},
-  single: {}
+  single: {},
+  sep: {},
+  strict: {}
 })
 
 module.exports = putData
