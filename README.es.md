@@ -99,7 +99,7 @@ cacache.saca.porHacheo(rutaCache, integridad).then(datos => {
 
 ### Cómo Contribuir
 
-El equipo de cacache felizmente acepta contribuciones de código y otras maneras de participación. ¡Hay muchas formas diferentes de contribuir! La [Guía de Colaboradores](CONTRIBUTING.md) (en inglés) tiene toda la información que necesitas para cualquier tipo de contribución: todo desde cómo reportar errores hasta cómo someter parches con nuevas características. Con todo y eso, no se preocupe por si lo que haces está exáctamente correcto: no hay ningún problema en hacer preguntas si algo no está claro, o no lo encuentras.
+El equipo de cacache felizmente acepta contribuciones de código y otras maneras de participación. ¡Hay muchas formas diferentes de contribuir! La [Guía de Colaboradores](CONTRIBUTING.md) (en inglés) tiene toda la información que necesitas para cualquier tipo de contribución: todo desde cómo reportar errores hasta cómo someter parches con nuevas características. Con todo y eso, no te preocupes por si lo que haces está exáctamente correcto: no hay ningún problema en hacer preguntas si algo no está claro, o no lo encuentras.
 
 El equipo de cacache tiene miembros hispanohablantes: es completamente aceptable crear `issues` y `pull requests` en español/castellano.
 
