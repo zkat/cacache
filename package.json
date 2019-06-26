@@ -62,7 +62,7 @@
     "chownr": "^1.1.1",
     "figgy-pudding": "^3.5.1",
     "glob": "^7.1.4",
-    "graceful-fs": "^4.1.15",
+    "graceful-fs": "^4.2.0",
     "lru-cache": "^5.1.1",
     "mississippi": "^3.0.0",
     "mkdirp": "^0.5.1",
