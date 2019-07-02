@@ -1,5 +1,7 @@
 # cacache [![npm version](https://img.shields.io/npm/v/cacache.svg)](https://npm.im/cacache) [![license](https://img.shields.io/npm/l/cacache.svg)](https://npm.im/cacache) [![Travis](https://img.shields.io/travis/zkat/cacache.svg)](https://travis-ci.org/zkat/cacache) [![AppVeyor](https://ci.appveyor.com/api/projects/status/github/zkat/cacache?svg=true)](https://ci.appveyor.com/project/zkat/cacache) [![Coverage Status](https://coveralls.io/repos/github/zkat/cacache/badge.svg?branch=latest)](https://coveralls.io/github/zkat/cacache?branch=latest)
 
+## NOTE: This repository has moved to https://github.com/npm/cacache
+
 [`cacache`](https://github.com/zkat/cacache) is a Node.js library for managing
 local key and content address caches. It's really fast, really good at
 concurrency, and it will never give you corrupted data, even if cache files
@@ -42,6 +44,7 @@ _Translations: [español](README.es.md)_
     * [`tmp.withTmp`](#with-tmp)
   * Integrity
     * [Subresource Integrity](#integrity)
+    
     * [`verify`](#verify)
     * [`verify.lastRun`](#verify-last-run)
 
